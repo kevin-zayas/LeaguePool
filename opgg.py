@@ -125,6 +125,8 @@ def calc_champion_pool():
 
     complete_champ_pool = current_champion_pool+check_subsets(champion_set, matchup_sets, current_pool_matchups)[0]
 
+    return complete_champ_pool
+
 
 def get_champion_pool_summary(champion_pool=["illaoi","garen","mordekaiser","nasus"]):
     """
@@ -153,11 +155,17 @@ def get_champion_pool_summary(champion_pool=["illaoi","garen","mordekaiser","nas
             bad_matchups = document["bad_matchups"]
             logging.info(f"\n\n{champion}'s bad matchups: {bad_matchups}\n")
 
-def print_champion_pool_winrates(opponent,champ_pool = ["illaoi","garen","mordekaiser","nasus"]):
+
+def print_champion_pool_winrates(opponent, champ_pool=["illaoi","garen","mordekaiser","nasus"]):
+    """
+    Prints the win rates of a champion pool against a specific opponent.
+
+    Args:
+        opponent (str): Name of the opponent champion.
+        champ_pool (list): List of champions in the champion pool.
+    """
     pass
     # TO DO
-
-
 
 
 # Example usage
