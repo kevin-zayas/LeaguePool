@@ -13,7 +13,7 @@ BAD_MATCHUP_THRESHOLD = 49.0
 class MatchupDataSpider(scrapy.Spider):
     name = "matchup_data_spider"
     allowed_domains = ["op.gg"]
-    ranks = ["platinum"]  # Add more ranks if needed
+    ranks = ["gold"]  # Add more ranks if needed
     roles = ["top"]  # Add more roles if needed
     chanmpion_list = []
 
@@ -32,7 +32,6 @@ class MatchupDataSpider(scrapy.Spider):
                     champion = self.filter_champion_name(champion)
 
                     url = f'https://www.op.gg/champions/{champion}/{role}/counters?region=global&tier={rank}'
-                    print("url:",url)
                     yield scrapy.Request(url=url, callback=self.parse, meta={'rank': rank, 'role': role, 'champion':champion})
                     # break
 
@@ -40,7 +39,6 @@ class MatchupDataSpider(scrapy.Spider):
         role = response.meta.get('role')
         rank = response.meta.get('rank')
         champion = response.meta.get('champion')
-        print(len(self.champion_list))
 
         self.driver.get(response.url)
         body = self.driver.page_source
@@ -66,7 +64,7 @@ class MatchupDataSpider(scrapy.Spider):
                 #     'win_rate': win_rate,
                 # }
 
-        self.save_to_mongodb(role, rank, champion, good_matchups, bad_matchups, matchup_win_rate_map)
+        self.save_to_mongodb(role, rank, champion, sorted(good_matchups), sorted(bad_matchups), matchup_win_rate_map)
 
     def save_to_mongodb(self, role, rank, champion, good_matchups, bad_matchups, matchup_win_rate_map):
         client = MongoClient('mongodb://localhost:27017/')

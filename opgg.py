@@ -11,65 +11,8 @@ from pymongo import MongoClient
 # Connect to the MongoDB server
 client = MongoClient('mongodb://localhost:27017/')
 DB = client['LeaguePool']
-
-PICK_RATE_THRESHOLD = 1.0
-GOOD_MATCHUP_THRESHOLD = 51.0
-BAD_MATCHUP_THRESHOLD = 49.0
-RANK_TIER = "gold"
-ROLE_NAME = "Top"  # Should be capitalized
-
-def web_scrape_table_rows(page_url, table_num):
-    """
-    Web scrape the table rows from the given URL and table number.
-
-    Args:
-        page_url (str): The URL of the webpage to scrape.
-        table_num (int): The index of the table to extract rows from.
-
-    Returns:
-        list: List of table rows extracted from the webpage.
-    """
-    page = urlopen(page_url)
-    html = page.read().decode("utf-8")
-    soup = BeautifulSoup(html, "html.parser")
-
-    champions_set = set()
-    all_tables = soup.findChildren('table')
-    table = all_tables[table_num]
-
-    table_rows = table.findChildren(['tr'])
-    return table_rows
-
-def save_role_champion_list():
-    """
-    Check op.gg and save the list of champions for the specified role to the database.
-    """
-    logging.info(f"Saving champion list for {ROLE_NAME}")
-    page_url = f"https://www.op.gg/champions?region=global&tier={RANK_TIER}&position={ROLE_NAME.lower()}"
-    table_rows = web_scrape_table_rows(page_url, 0)
-    champion_list = []
-
-    for row in table_rows:
-        cells = row.findChildren('td')
-        if not cells:
-            continue
-        champion_name = cells[1].get_text()
-        pick_rate = float(cells[4].get_text()[:-1])
-        if pick_rate >= PICK_RATE_THRESHOLD:
-            champion_list.append(champion_name.lower())
-
-    collection = DB["role_champion_map"]
-    query = {"role": ROLE_NAME.lower()}
-    document = {"role": ROLE_NAME.lower(), "champions": champion_list}
-
-    try:
-        result = collection.replace_one(query, document, upsert=True)
-        if result.modified_count > 0 or result.upserted_id is not None:
-            logging.info(f"Champ list data saved for {ROLE_NAME}")
-        else:
-            logging.info(f"Champ list data for {ROLE_NAME} was up to date")
-    except PyMongoError as e:
-        logging.error(f"Error occurred while saving champ list data for {ROLE_NAME}: {e}")
+ROLE = "top"
+RANK = "gold"
 
 def load_role_champion_list():
     """
@@ -78,77 +21,16 @@ def load_role_champion_list():
     Returns:
         list: List of champions for the specified role.
     """
-    logging.info(f"Loading champion list for {ROLE_NAME}")
+    logging.info(f"Loading champion list for {ROLE}")
     collection = DB["role_champion_map"]
-    query = {"role": ROLE_NAME.lower()}
+    query = {"role": ROLE}
     document = collection.find_one(query)
 
     if document is not None:
         return document["champions"]
     else:
-        logging.warning(f"No champion list found for role: {ROLE_NAME}")
+        logging.warning(f"No champion list found for role: {ROLE}")
         return []
-
-def get_champ_matchups(target_champion, champion_list):
-    """
-    Get the list of good and matchups for the specified champion and role.
-
-    Args:
-        target_champion (str): The champion to find good matchups for.
-        champion_list (list): List of champions for the specified role.
-
-    Returns:
-        tuple: tuple of lists containing champions considered as good and bad matchups for the target champion.
-    """
-    logging.info(f"Finding matchup info for {target_champion}")
-    if target_champion == "wukong":
-        target_champion = "monkeyking"
-    elif target_champion == "nunu&willump":
-        target_champion = "nunu"
-
-    punctuation = "'. "
-    for char in punctuation:
-        target_champion = target_champion.replace(char, '')
-
-    page_url = f'https://www.op.gg/champions/{target_champion}/{ROLE_NAME.lower()}/counters?region=global&tier={RANK_TIER}'
-    table_rows = web_scrape_table_rows(page_url, 1)
-    good_matchups, bad_matchups = [],[]
-
-    for row in table_rows:
-        cells = row.findChildren('td')
-        if not cells:
-            continue
-        win_rate_percent = float(cells[2].get_text()[:-1])
-        champion = cells[1].get_text().lower()
-        if champion in champion_list:
-            if win_rate_percent >= GOOD_MATCHUP_THRESHOLD:
-                good_matchups.append(champion)
-            elif win_rate_percent <= BAD_MATCHUP_THRESHOLD:
-                bad_matchups.append(champion)
-    return sorted(good_matchups),sorted(bad_matchups)
-
-def save_role_matchups():
-    """
-    Save the matchup information for all champs in a specific role to the database.
-    """
-    logging.info(f"Saving {ROLE_NAME} matchup information")
-    champion_list = load_role_champion_list()
-
-    collection = DB[f"{ROLE_NAME.lower()}_matchup_info"]
-
-    for champion in champion_list:
-        good_matchups,bad_matchups = get_champ_matchups(champion, champion_list)
-        query = {"champion": champion}
-        document = {"champion": champion, "good_matchups": good_matchups, "bad_matchups":bad_matchups}
-        # logging.info(f"{champion}   -   {good_matchups}")
-        try:
-            result = collection.replace_one(query, document, upsert=True)
-            if result.modified_count > 0 or result.upserted_id is not None:
-                logging.info(f"Matchup data updated for {champion}")
-            else:
-                logging.info(f"Matchup data for {champion} was up to date")
-        except PyMongoError as e:
-            logging.error(f"Error occurred while saving matchup data for {champion}: {e}")
 
 
 def load_role_matchups():
@@ -158,10 +40,10 @@ def load_role_matchups():
     Returns:
         collection: A collection containing matchup information for all champs in a role.
     """
-    logging.info(f"Loading {ROLE_NAME} matchup information")
+    logging.info(f"Loading {RANK} {ROLE} matchup information")
 
-    collection = DB[f"{ROLE_NAME.lower()}_matchup_info"]
-    return collection       #may delete this method
+    collection = DB[f"{RANK}_{ROLE}_matchup_info"]
+    return collection
 
 def check_subsets(all_champions, matchup_sets, current_pool_matchups):
     """
@@ -192,6 +74,7 @@ def check_subsets(all_champions, matchup_sets, current_pool_matchups):
                 is_found = True
 
     logging.info(f"Suggested champ pool size: {subset_size}")
+
     for matchup_pool in complete_matchup_pools:
         champion_pool = []
         for matchup_set in matchup_pool:
@@ -217,7 +100,7 @@ def calc_champion_pool():
     collection = load_role_matchups()
     champion_set = set(load_role_champion_list())
 
-    current_champion_pool = ["illaoi","garen","mordekaiser","nasus"]
+    current_champion_pool = ["illaoi","garen"]
     current_pool_matchups = []
     logging.info(f"Current champion pool: {current_champion_pool}")
 
@@ -241,15 +124,7 @@ def calc_champion_pool():
     matchup_sets = [set(doc["good_matchups"]) for doc in result]
 
     complete_champ_pool = current_champion_pool+check_subsets(champion_set, matchup_sets, current_pool_matchups)[0]
-    # get_champion_pool_summary(complete_champ_pool)
 
-def refresh():
-    """
-    Refreshes the role champion set and role counters.
-    """
-    save_role_champion_list()
-    save_role_matchups()
-    logging.info("Refresh completed")
 
 def get_champion_pool_summary(champion_pool=["illaoi","garen","mordekaiser","nasus"]):
     """
@@ -260,6 +135,7 @@ def get_champion_pool_summary(champion_pool=["illaoi","garen","mordekaiser","nas
     """
     collection = load_role_matchups()
     champs_not_countered = set(load_role_champion_list())
+    logging.info(f"Displaying summary for champion pool: {champion_pool}")
     for champion in champion_pool:
         query = {"champion":champion}
         document = collection.find_one(query)
@@ -277,7 +153,8 @@ def get_champion_pool_summary(champion_pool=["illaoi","garen","mordekaiser","nas
             bad_matchups = document["bad_matchups"]
             logging.info(f"\n\n{champion}'s bad matchups: {bad_matchups}\n")
 
-def print_champion_pool_winrates(champ_pool = ["illaoi","garen","mordekaiser","nasus"], opponent):
+def print_champion_pool_winrates(opponent,champ_pool = ["illaoi","garen","mordekaiser","nasus"]):
+    pass
     # TO DO
 
 
@@ -285,7 +162,6 @@ def print_champion_pool_winrates(champ_pool = ["illaoi","garen","mordekaiser","n
 
 # Example usage
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
-refresh()
 calc_champion_pool()
 get_champion_pool_summary()
 
