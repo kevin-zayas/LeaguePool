@@ -9,6 +9,7 @@ from pymongo import MongoClient
 #     payload = {'api_key': API_KEY, 'url': url}
 #     proxy_url = 'https://proxy.scrapeops.io/v1/?' + urlencode(payload)
 #     return proxy_url
+PICK_RATE_THRESHOLD = 1.0
 
 class ChampionListSpider(scrapy.Spider):
     name = "champion_list_spider"
@@ -31,13 +32,13 @@ class ChampionListSpider(scrapy.Spider):
         win_rate_map = {}
 
         for row in champion_rows:
-            champion_name = row.css('a > img::attr(alt)').get()
+            champion_name = row.css('a > img::attr(alt)').get().lower()
             win_rate = row.xpath('../td[4]/text()').get()
             pick_rate = float(row.xpath('../td[5]/text()').get())
-            if pick_rate > 1.0:
+            if pick_rate > PICK_RATE_THRESHOLD:
                 champion_list.append(champion_name)
                 win_rate_map[champion_name] = win_rate
-                # yield {"champion":champion_name}
+                yield {"champion":champion_name}
 
         self.save_to_mongodb(role, rank, champion_list, win_rate_map)
 
