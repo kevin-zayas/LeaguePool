@@ -1,11 +1,5 @@
 import logging
-from selenium import webdriver
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import pandas as pd
 from itertools import combinations
-from time import time
-import pickle
 from pymongo import MongoClient
 
 # Connect to the MongoDB server

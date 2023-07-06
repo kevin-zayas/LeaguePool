@@ -6,9 +6,21 @@ from pymongo.errors import PyMongoError
 from scrapy import signals
 from scrapy.http import HtmlResponse
 from selenium import webdriver
+from urllib.parse import urlencode
 
 GOOD_MATCHUP_THRESHOLD = 51.0
 BAD_MATCHUP_THRESHOLD = 49.0
+API_KEY = 'dfbf112d14bb6ff6c667c7d9aae580b0'
+USE_PROXY = True
+
+def get_proxy_url(url):
+    if not USE_PROXY:
+        logging.info("Elected to not use Proxy Service")
+        return url
+    logging.info("Using Proxy Service")
+    payload = {'api_key': API_KEY, 'url': url}
+    proxy_url = 'http://api.scraperapi.com/?' + urlencode(payload)
+    return proxy_url
 
 class MatchupDataSpider(scrapy.Spider):
     """
@@ -16,7 +28,7 @@ class MatchupDataSpider(scrapy.Spider):
     """
     name = "matchup_data_spider"
     allowed_domains = ["op.gg"]
-    ranks = ["gold"]  # Add more ranks if needed
+    ranks = ["gold","platinum"]  # Add more ranks if needed
     roles = ["top"]  # Add more roles if needed
     champion_list = []
 
@@ -28,6 +40,7 @@ class MatchupDataSpider(scrapy.Spider):
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")  # Run Chrome in headless mode
         self.driver = webdriver.Chrome(options=options)
+        logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.WARNING)
 
     def start_requests(self):
         """
@@ -41,7 +54,7 @@ class MatchupDataSpider(scrapy.Spider):
                     champion = self.filter_champion_name(champion)
 
                     url = f'https://www.op.gg/champions/{champion}/{role}/counters?region=global&tier={rank}'
-                    yield scrapy.Request(url=url, callback=self.parse, meta={'rank': rank, 'role': role, 'champion': champion})
+                    yield scrapy.Request(url=get_proxy_url(url), callback=self.parse, meta={'rank': rank, 'role': role, 'champion': champion})
 
     def parse(self, response):
         """
