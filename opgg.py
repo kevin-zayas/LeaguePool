@@ -3,12 +3,12 @@ from itertools import combinations
 from pymongo import MongoClient
 
 # Connect to the MongoDB server
-client = MongoClient('mongodb://localhost:27017/')
-DB = client['LeaguePool']
+# client = MongoClient('mongodb://localhost:27017/')
+# DB = client['LeaguePool']
 ROLE = "top"
 RANK = "gold"
 
-def load_role_champion_list():
+def load_role_champion_list(DB):
     """
     Load the list of champions for the specified role from the database.
 
@@ -27,7 +27,7 @@ def load_role_champion_list():
         return []
 
 
-def load_role_matchups():
+def load_role_matchups(DB):
     """
     Load the matchup information for all champs in a specific role from the database.
 
@@ -39,7 +39,7 @@ def load_role_matchups():
     collection = DB[f"{RANK}_{ROLE}_matchup_info"]
     return collection
 
-def check_subsets(all_champions, matchup_sets, current_pool_matchups):
+def check_subsets(all_champions, matchup_sets, current_pool_matchups, DB):
     """
     Check subsets of champions to find complete champion pools.
 
@@ -51,7 +51,7 @@ def check_subsets(all_champions, matchup_sets, current_pool_matchups):
     Returns:
         list: List of all complete champion pools.
     """
-    collection = load_role_matchups()
+    collection = load_role_matchups(DB)
     suggested_champ_pools = []
     complete_matchup_pools = []
     subset_size = 0
@@ -84,17 +84,16 @@ def check_subsets(all_champions, matchup_sets, current_pool_matchups):
 
     return suggested_champ_pools
 
-def calc_champion_pool():
+def calc_champion_pool(DB,current_champion_pool = ["illaoi","garen"]):
     """
     Calculate the champion pool based on good matchups and restrictions.
 
     Returns:
         list: List of champions in the calculated champion pool.
     """
-    collection = load_role_matchups()
-    champion_set = set(load_role_champion_list())
+    collection = load_role_matchups(DB)
+    champion_set = set(load_role_champion_list(DB))
 
-    current_champion_pool = ["illaoi","garen"]
     current_pool_matchups = []
     logging.info(f"Current champion pool: {current_champion_pool}")
 
@@ -117,7 +116,7 @@ def calc_champion_pool():
     result = collection.aggregate(pipeline)
     matchup_sets = [set(doc["good_matchups"]) for doc in result]
 
-    complete_champ_pool = current_champion_pool+check_subsets(champion_set, matchup_sets, current_pool_matchups)[0]
+    complete_champ_pool = current_champion_pool+check_subsets(champion_set, matchup_sets, current_pool_matchups,DB)[0]
 
     return complete_champ_pool
 
@@ -129,8 +128,8 @@ def get_champion_pool_summary(champion_pool=["illaoi","garen","mordekaiser","nas
     Args:
         champion_pool (list): List of champions in the champion pool.
     """
-    collection = load_role_matchups()
-    champs_not_countered = set(load_role_champion_list())
+    collection = load_role_matchups(DB)
+    champs_not_countered = set(load_role_champion_list(DB))
     logging.info(f"Displaying summary for champion pool: {champion_pool}")
     for champion in champion_pool:
         query = {"champion":champion}
@@ -164,10 +163,10 @@ def print_champion_pool_winrates(opponent, champ_pool=["illaoi","garen","mordeka
 
 # Example usage
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
-calc_champion_pool()
-get_champion_pool_summary()
+# calc_champion_pool()
+# get_champion_pool_summary()
+# client.close()
 
-client.close()
 
 
 #after generating the list of possible champ pool additions, filter through and only take the x with the highest winrate/rank? lowest banrate?
