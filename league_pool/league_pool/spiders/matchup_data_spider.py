@@ -28,7 +28,7 @@ class MatchupDataSpider(scrapy.Spider):
     """
     name = "matchup_data_spider"
     allowed_domains = ["op.gg"]
-    ranks = ["gold","platinum"]  # Add more ranks if needed
+    ranks = ["gold"]  # Add more ranks if needed
     roles = ["top"]  # Add more roles if needed
     champion_list = []
 

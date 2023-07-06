@@ -11,8 +11,8 @@ class ChampionListSpider(scrapy.Spider):
     """
     name = "champion_list_spider"
     allowed_domains = ["op.gg"]
-    ranks = ["gold", "platinum"]  # Add more ranks if needed
-    roles = ["top", "jungle"]  # Add more roles if needed
+    ranks = ["gold"]  # Add more ranks if needed
+    roles = ["top"]  # Add more roles if needed
 
     def start_requests(self):
         """
