@@ -2,8 +2,10 @@ from flask import Flask
 from flask import request
 from opgg import calc_champion_pool,load_role_champion_list
 from pymongo import MongoClient
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 
 @app.route('/champion-pool', methods=['GET'])
