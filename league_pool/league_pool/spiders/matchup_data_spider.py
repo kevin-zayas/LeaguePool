@@ -11,7 +11,7 @@ from urllib.parse import urlencode
 GOOD_MATCHUP_THRESHOLD = 51.0
 BAD_MATCHUP_THRESHOLD = 49.0
 API_KEY = 'dfbf112d14bb6ff6c667c7d9aae580b0'
-USE_PROXY = True
+USE_PROXY = False
 
 def get_proxy_url(url):
     if not USE_PROXY:
