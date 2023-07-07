@@ -84,7 +84,7 @@ def check_subsets(all_champions, matchup_sets, current_pool_matchups, DB):
 
     return suggested_champ_pools
 
-def calc_champion_pool(DB,current_champion_pool = ["illaoi","garen"]):
+def calc_champion_pool(DB,current_champion_pool = ["illaoi","garen"],excluded_champions = ["kayle", "varus", "rengar", "teemo", "irelia", "quinn", "akali", "vayne"]):
     """
     Calculate the champion pool based on good matchups and restrictions.
 
@@ -108,7 +108,6 @@ def calc_champion_pool(DB,current_champion_pool = ["illaoi","garen"]):
             logging.info(f"Current champion pool covers all champions: {current_champion_pool}")
             return current_champion_pool
 
-    excluded_champions = ["kayle", "varus", "rengar", "teemo", "irelia", "quinn", "akali", "vayne"]
     pipeline = [
         {"$match": {"champion": {"$nin": excluded_champions}}},
         {"$project": {"good_matchups": 1}}

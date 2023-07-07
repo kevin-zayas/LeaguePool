@@ -9,11 +9,20 @@ DB = client['LeaguePool']
 
 @app.route('/champion-pool', methods=['GET'])
 def get_champion_pool():
-    # Your code for calculating the champion pool
-    champion_pool = calc_champion_pool(DB)
+    current_champions = request.args.get('current_champions')
+    if current_champions:
+        current_champions = current_champions.split(',')
+    else:
+        current_champions = []
 
-    # Return the champion pool as a JSON response
-    return {'champion_pool': champion_pool}
+    exclude_champions = request.args.get('exclude_champions')
+    if exclude_champions:
+        exclude_champions = current_champions.split(',')
+    else:
+        exclude_champions = []
+
+    champion_pool = calc_champion_pool(DB, current_champions,exclude_champions)
+    return {'champion_pool': champion_pool}     # Return the champion pool as a JSON response
 
 
 @app.teardown_appcontext
