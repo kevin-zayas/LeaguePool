@@ -19,7 +19,7 @@ def get_champion_pool():
 
     exclude_champions = request.args.get('exclude_champions')
     if exclude_champions:
-        exclude_champions = current_champions.split(',')
+        exclude_champions = exclude_champions.split(',')
     else:
         exclude_champions = []
 
