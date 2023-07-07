@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 from opgg import calc_champion_pool
 from pymongo import MongoClient
 
