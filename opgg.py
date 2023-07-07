@@ -159,6 +159,27 @@ def print_champion_pool_winrates(opponent, champ_pool=["illaoi","garen","mordeka
     pass
     # TO DO
 
+def check_DB(DB):
+    champion_list = load_role_champion_list(DB)
+    collection = load_role_matchups(DB)
+    missing_data = []
+    for champion in champion_list:
+        punctuation = "'. "
+        for char in punctuation:
+            champion = champion.replace(char, '')
+        query = {"champion":champion}
+        document = collection.find_one(query)
+        if document is not None:
+            good_matchups = document["good_matchups"]
+            bad_matchups = document["bad_matchups"]
+            if not good_matchups and not bad_matchups:
+                missing_data.append(champion)
+        else:
+            missing_data.append(champion)
+    logging.info(missing_data)
+
+
+
 
 # Example usage
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
@@ -166,9 +187,12 @@ logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 # Connect to the MongoDB server
 client = MongoClient('mongodb://localhost:27017/')
 DB = client['LeaguePool']
-calc_champion_pool(DB,[],[])
+check_DB(DB)
+# calc_champion_pool(DB,[],[])
 # get_champion_pool_summary()
 client.close()
+
+
 
 
 
