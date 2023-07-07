@@ -185,12 +185,12 @@ def check_DB(DB):
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
 # Connect to the MongoDB server
-client = MongoClient('mongodb://localhost:27017/')
-DB = client['LeaguePool']
-check_DB(DB)
+# client = MongoClient('mongodb://localhost:27017/')
+# DB = client['LeaguePool']
+# check_DB(DB)
 # calc_champion_pool(DB,[],[])
 # get_champion_pool_summary()
-client.close()
+# client.close()
 
 
 
