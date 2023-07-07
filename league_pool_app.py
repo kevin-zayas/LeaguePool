@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-from opgg import calc_champion_pool
+from opgg import calc_champion_pool,load_role_champion_list
 from pymongo import MongoClient
 
 app = Flask(__name__)
