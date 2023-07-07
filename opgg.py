@@ -5,22 +5,22 @@ from pymongo import MongoClient
 ROLE = "top"
 RANK = "gold"
 
-def load_role_champion_list(DB):
+def load_role_champion_list(DB,role="top",rank="gold"):
     """
-    Load the list of champions for the specified role from the database.
+    Load the list of champions for the specified role and rank from the database.
 
     Returns:
         list: List of champions for the specified role.
     """
-    logging.info(f"Loading champion list for {ROLE}")
+    logging.info(f"Loading champion list for {role}")
     collection = DB["role_champion_map"]
-    query = {"role": ROLE}
+    query = {"role": role, "rank": rank}
     document = collection.find_one(query)
 
     if document is not None:
         return document["champions"]
     else:
-        logging.warning(f"No champion list found for role: {ROLE}")
+        logging.warning(f"No champion list found for role: {role}, rank: {rank}")
         return []
 
 
@@ -185,12 +185,12 @@ def check_DB(DB):
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
 # Connect to the MongoDB server
-client = MongoClient('mongodb://localhost:27017/')
-DB = client['LeaguePool']
-check_DB(DB)
-calc_champion_pool(DB,["illaoi"],["kayle"])
+# client = MongoClient('mongodb://localhost:27017/')
+# DB = client['LeaguePool']
+# check_DB(DB)
+# calc_champion_pool(DB,["illaoi"],["kayle"])
 # get_champion_pool_summary()
-client.close()
+# client.close()
 
 
 

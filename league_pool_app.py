@@ -27,6 +27,17 @@ def get_champion_pool():
     client.close()
     return {'champion_pool': champion_pool}     # Return the champion pool as a JSON response
 
+@app.route('/champion-list', methods=['GET'])
+def get_champion_list():
+    client = MongoClient('mongodb://localhost:27017/')
+    DB = client['LeaguePool']
+
+    role = request.args.get('role')
+
+    champion_list = calc_champion_pool(DB, role)
+    client.close()
+    return {'champion_list': champion_list}     # Return the champion list as a JSON response
+
 
 
 if __name__ == '__main__':
