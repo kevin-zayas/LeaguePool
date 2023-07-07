@@ -2,9 +2,6 @@ import logging
 from itertools import combinations
 from pymongo import MongoClient
 
-# Connect to the MongoDB server
-# client = MongoClient('mongodb://localhost:27017/')
-# DB = client['LeaguePool']
 ROLE = "top"
 RANK = "gold"
 
@@ -66,18 +63,21 @@ def check_subsets(all_champions, matchup_sets, current_pool_matchups, DB):
             if union_set.issuperset(all_champions):
                 complete_matchup_pools.append(combo)
                 is_found = True
+                # break
 
     logging.info(f"Suggested champ pool size: {subset_size}")
 
     for matchup_pool in complete_matchup_pools:
         champion_pool = []
         for matchup_set in matchup_pool:
-            query = {"good_matchups": sorted(list(matchup_set))}
-            documents = collection.find(query, {"champion": 1})
-            champions = [doc["champion"] for doc in documents]
-            if champions:
-                combined_champ_name = " or ".join(champions)
-                champion_pool.append(combined_champ_name)
+            if matchup_set:
+                query = {"good_matchups": sorted(list(matchup_set))}
+                # logging.info(sorted(list(matchup_set)))
+                documents = collection.find(query, {"champion": 1})
+                champions = [doc["champion"] for doc in documents]
+                if champions:
+                    combined_champ_name = " or ".join(champions)
+                    champion_pool.append(combined_champ_name)
 
         logging.info(champion_pool)
         suggested_champ_pools.append(champion_pool)
@@ -162,9 +162,13 @@ def print_champion_pool_winrates(opponent, champ_pool=["illaoi","garen","mordeka
 
 # Example usage
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
-# calc_champion_pool()
+
+# Connect to the MongoDB server
+client = MongoClient('mongodb://localhost:27017/')
+DB = client['LeaguePool']
+calc_champion_pool(DB,[],[])
 # get_champion_pool_summary()
-# client.close()
+client.close()
 
 
 
