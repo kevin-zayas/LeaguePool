@@ -34,7 +34,7 @@ def get_champion_list():
 
     role = request.args.get('role')
 
-    champion_list = calc_champion_pool(DB, role)
+    champion_list = load_role_champion_list(DB, role)
     client.close()
     return {'champion_list': champion_list}     # Return the champion list as a JSON response
 
