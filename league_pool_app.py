@@ -25,9 +25,9 @@ def get_champion_pool():
     else:
         exclude_champions = []
 
-    champion_pool = calc_champion_pool(DB, current_champions,exclude_champions)
+    champion_pools = calc_champion_pool(DB, current_champions,exclude_champions)
     client.close()
-    return {'champion_pool': champion_pool}     # Return the champion pool as a JSON response
+    return {'champion_pools': champion_pools}     # Return the champion pool as a JSON response
 
 @app.route('/champion-list', methods=['GET'])
 def get_champion_list():

@@ -20,15 +20,32 @@
             <select id="role-select" onchange="handleRoleSelection()">
               <option value="">Select a Role</option>
               <option value="top">Top</option>
-              <option value="jungle">Jungle</option>
+              <!-- <option value="jungle">Jungle</option>
               <option value="mid">Mid</option>
               <option value="adc">ADC</option>
-              <option value="support">Support</option>
+              <option value="support">Support</option> -->
             </select>
         </section>
 
         <button id="save-button" onclick="handleRoleSave()" disabled>Save Selection</button>
-        
+
+
+        <section id="champion-pool-section" style="display: none;">
+            <h2>Champion Pool</h2>
+            <div id="champion-pool"></div>
+        </section>
+
+        <section id="excluded-champions-section" style="display: none;">
+            <h2>Champions to Exclude:</h2>
+            <div id="excluded-champions"></div>
+        </section>
+
+        <section id="calculate-champion-pool-button" style="display: none;">
+          <button id="calculate-button" onclick="caclulateChampPools()" >Calculate</button>
+        </section>
+        <section id="suggested-champions" style= "display: none;">
+          <h2>Suggested Champion Pools:</h2>
+        </section>
 
     </main>
 

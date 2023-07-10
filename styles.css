@@ -1,0 +1,39 @@
+.remove-icon {
+  cursor: pointer;
+  color: #888888;
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  margin-left: 5px;
+  transition: color 0.3s;
+}
+
+.remove-icon:hover {
+  color: #ff5555;
+}
+
+.remove-icon::after {
+  content: '\2716';
+  font-weight: bold;
+  color: inherit;
+}
+
+.remove-icon:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.champion-pool-item,
+.excluded-champion-item {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #888888;
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+.champion-name {
+  margin-right: 0;
+}
