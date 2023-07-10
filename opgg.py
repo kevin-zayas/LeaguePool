@@ -36,7 +36,7 @@ def load_role_matchups(DB):
     collection = DB[f"{RANK}_{ROLE}_matchup_info"]
     return collection
 
-def check_subsets(all_champions, matchup_sets, current_pool_matchups, DB):
+def check_subsets(all_champions, matchup_sets, current_champion_pool, current_pool_matchups, DB):
     """
     Check subsets of champions to find complete champion pools.
 
@@ -75,7 +75,7 @@ def check_subsets(all_champions, matchup_sets, current_pool_matchups, DB):
                 # logging.info(sorted(list(matchup_set)))
                 documents = collection.find(query, {"champion": 1})
                 champions = [doc["champion"] for doc in documents]
-                if champions:
+                if champions and champions[0] not in current_champion_pool:
                     combined_champ_name = " or ".join(champions)
                     champion_pool.append(combined_champ_name)
 
@@ -115,7 +115,7 @@ def calc_champion_pool(DB,current_champion_pool = ["illaoi","garen"],excluded_ch
     result = collection.aggregate(pipeline)
     matchup_sets = [set(doc["good_matchups"]) for doc in result]
 
-    complete_champ_pool = current_champion_pool+check_subsets(champion_set, matchup_sets, current_pool_matchups,DB)[0]
+    complete_champ_pool = current_champion_pool+check_subsets(champion_set, matchup_sets, current_champion_pool, current_pool_matchups,DB)[0]
 
     return complete_champ_pool
 
