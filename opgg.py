@@ -75,7 +75,9 @@ def check_subsets(all_champions, matchup_sets, current_champion_pool, current_po
                 # logging.info(sorted(list(matchup_set)))
                 documents = collection.find(query, {"champion": 1})
                 champions = [doc["champion"] for doc in documents]
+                logging.info("current_champion_pool": current_champion_pool)
                 if champions and champions[0] not in current_champion_pool:
+                    logging.info("champion[0]": champion[0])
                     combined_champ_name = " or ".join(champions)
                     champion_pool.append(combined_champ_name)
 
