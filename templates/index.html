@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>League Pool</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         header {
             text-align: center;
@@ -50,6 +50,6 @@
     </main>
 
 
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
