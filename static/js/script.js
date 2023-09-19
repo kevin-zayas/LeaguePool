@@ -218,7 +218,7 @@ function caclulateChampPools(){
   var excludedChampsString;
 
   var championPoolList = document.getElementById("champion-pool-list");
-  if(championPoolList.children.length > 0){
+  if (championPoolList){
     currentPoolString = Array.from(championPoolList.children).map(function(item) {
       return item.firstChild.textContent;
     }).join(",");;
@@ -228,7 +228,7 @@ function caclulateChampPools(){
 
 
   var excludedChampionList = document.getElementById("excluded-champions-list")
-  if (excludedChampionList.children.length > 0){
+  if (excludedChampionList){
     excludedChampsString = Array.from(excludedChampionList.children).map(function(item) {
       return item.firstChild.textContent;
     }).join(",");
