@@ -8,12 +8,12 @@ LeaguePool is a web app I created to help League players add champions to their 
 
 Navigate to http://3.145.60.140:5000/ to use the web app.
 #### Currently functionality:
-- Choosing a rank and role to generate the champ pool (Only Top and Gold for now)
+- Choosing a rank and role to generate the champ pool (Only Top and Gold for now to limit DB usage)
 - Adding current champions to be included in the champ pool calculations
 - Excluding specific champions from the champ pool calculations
 
 #### Future plans:
-- Add image icons for all champions
+- Add image icons for all champions 
 - Improve aesthetics for the webpage
 - Ability to show details of favorable matchups for different champions
 - View that allows you to manually create a champ pool, showing you which champions your pool has a favorable matchup against as you go
