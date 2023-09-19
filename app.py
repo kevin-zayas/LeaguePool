@@ -1,5 +1,4 @@
-from flask import Flask
-from flask import request
+from flask import Flask, render_template, request
 from opgg import calc_champion_pool,load_role_champion_list
 from pymongo import MongoClient
 from flask_cors import CORS
