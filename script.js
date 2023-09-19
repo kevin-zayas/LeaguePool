@@ -31,7 +31,8 @@ function handleRoleSave() {
     console.log("Champion List (from cache):", championList);
     showChampionSections();
   } else {
-    var apiUrl = 'http://3.144.102.47:5000/champion-list?role=' + selectedRole;
+    //url based on the ip of the ec2 instance
+    var apiUrl = 'http://3.145.60.140:5000/champion-list?role=' + selectedRole;
     fetch(apiUrl)
       .then(response => response.json())
       .then(responseData => {
@@ -225,7 +226,8 @@ function caclulateChampPools(){
 
 
   //http://3.144.102.47:5000/champion-pool?current_champions=illaoi,garen&exclude_champions=kayle
-  var apiUrl = 'http://3.144.102.47:5000/champion-pool?current_champions='+currentPoolString+'&exclude_champions=' + excludedChampsString;
+  //url based on the ip of the ec2 instance
+  var apiUrl = 'http://3.145.60.140:5000/champion-pool?current_champions='+currentPoolString+'&exclude_champions=' + excludedChampsString;
   console.log("URL: ", apiUrl)
   fetch(apiUrl)
     .then(response => response.json())

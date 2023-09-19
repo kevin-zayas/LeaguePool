@@ -7,6 +7,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+@app.route('/')
+def index():
+    return "Hello, World!"
 
 @app.route('/champion-pool', methods=['GET'])
 def get_champion_pool():
