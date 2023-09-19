@@ -214,15 +214,28 @@ function removeChampionOption(selectedChampion) {
 }
 
 function caclulateChampPools(){
+  var currentPoolString;
+  var excludedChampsString;
+
   var championPoolList = document.getElementById("champion-pool-list");
-  var currentPoolString = Array.from(championPoolList.children).map(function(item) {
-    return item.firstChild.textContent;
-  }).join(",");;
+  if(championPoolList.children.length > 0){
+    currentPoolString = Array.from(championPoolList.children).map(function(item) {
+      return item.firstChild.textContent;
+    }).join(",");;
+  } else {
+    currentPoolString = ""
+  }
+
 
   var excludedChampionList = document.getElementById("excluded-champions-list")
-  var excludedChampsString = Array.from(excludedChampionList.children).map(function(item) {
-    return item.firstChild.textContent;
-  }).join(",");
+  if (excludedChampionList.children.length > 0){
+    excludedChampsString = Array.from(excludedChampionList.children).map(function(item) {
+      return item.firstChild.textContent;
+    }).join(",");
+  } else{
+    excludedChampsString = ""
+  }
+
 
 
   //http://3.144.102.47:5000/champion-pool?current_champions=illaoi,garen&exclude_champions=kayle
