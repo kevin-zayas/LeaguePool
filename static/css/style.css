@@ -1,15 +1,58 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #007bff;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+}
+
+main {
+  padding: 20px;
+}
+
+select, button {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
 .remove-icon {
   cursor: pointer;
   color: #888888;
   background-color: transparent;
   border: none;
-  font-size: 1rem;
-  margin-left: 5px;
-  transition: color 0.3s;
+  font-size: 1.2rem;
+  margin-left: 10px;
+  transition: color 0.3s, transform 0.3s;
 }
 
 .remove-icon:hover {
   color: #ff5555;
+  transform: scale(1.1);
 }
 
 .remove-icon::after {
@@ -29,9 +72,10 @@
   align-items: center;
   border: 1px solid #888888;
   border-radius: 10px;
-  padding: 5px;
-  margin-bottom: 5px;
-  margin-right: 5px;
+  padding: 8px 12px;
+  margin: 5px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .champion-name {
