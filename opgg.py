@@ -115,7 +115,7 @@ def calc_champion_pool(DB,current_champion_pool = ["illaoi","garen"],excluded_ch
     result = collection.aggregate(pipeline)
     matchup_sets = [set(doc["good_matchups"]) for doc in result]
 
-    complete_champ_pool = current_champion_pool+check_subsets(champion_set, matchup_sets, current_champion_pool, current_pool_matchups,DB)[0]
+    complete_champ_pool = check_subsets(champion_set, matchup_sets, current_champion_pool, current_pool_matchups,DB)
 
     return complete_champ_pool
 

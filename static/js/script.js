@@ -226,7 +226,6 @@ function caclulateChampPools(){
     currentPoolString = ""
   }
 
-
   var excludedChampionList = document.getElementById("excluded-champions-list")
   if (excludedChampionList){
     excludedChampsString = Array.from(excludedChampionList.children).map(function(item) {
@@ -235,8 +234,6 @@ function caclulateChampPools(){
   } else{
     excludedChampsString = ""
   }
-
-
 
   //http://3.144.102.47:5000/champion-pool?current_champions=illaoi,garen&exclude_champions=kayle
   //url based on the ip of the ec2 instance
@@ -252,20 +249,24 @@ function caclulateChampPools(){
       suggestedChampionsContainer.style.display = "block";
       var suggestedChampionsList = document.getElementById("suggested-champions-list") || createList("suggested-champions");
 
-      var item = document.createElement("li");
-      item.className = "suggested-champion-item";
+      // Clear the previous content of the list
+      suggestedChampionsList.innerHTML = "";
 
-      var suggestedPoolSpan = document.createElement("span");
-      suggestedPoolSpan.className = "suggested-pool";
-      console.log("pool: ",suggestedChampionPools.join(", "));
-      suggestedPoolSpan.textContent = suggestedChampionPools.join(", ");
+      // Iterate through suggested champion pools and create list items for each pool
+      suggestedChampionPools.forEach(pool => {
+        var item = document.createElement("li");
+        item.className = "suggested-champion-item";
 
-      item.appendChild(suggestedPoolSpan);
-      suggestedChampionsList.appendChild(item)
+        var suggestedPoolSpan = document.createElement("span");
+        suggestedPoolSpan.className = "suggested-pool";
+        suggestedPoolSpan.textContent = pool.join(", ");
+
+        item.appendChild(suggestedPoolSpan);
+        suggestedChampionsList.appendChild(item);
+      });
     })
     .catch(error => {
       console.error("Error:", error);
     });
-
 
 }
