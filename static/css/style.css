@@ -83,15 +83,25 @@ button:hover {
 }
 
 .suggested-champion-item {
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
   padding: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+
+.suggested-champion-item:hover {
+  background-color: #45a049;
 }
 
 .suggested-pool {
   font-weight: bold;
-  color: #007bff;
+}
+
+/* If you want to add a subtle border between the suggested pool items */
+.suggested-champion-item:not(:last-child) {
+  border-bottom: 1px solid #ddd;
 }
