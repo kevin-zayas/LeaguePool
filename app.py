@@ -12,7 +12,8 @@ def index():
 
 @app.route('/champion-pool', methods=['GET'])
 def get_champion_pool():
-    client = MongoClient('mongodb://localhost:27017/')
+    # client = MongoClient('mongodb://localhost:27017/')
+    client = MongoClient('mongodb://3.145.60.140:27017/')
     DB = client['LeaguePool']
 
     current_champions = request.args.get('current_champions')

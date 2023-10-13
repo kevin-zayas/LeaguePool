@@ -1,13 +1,13 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
+  background-color: #1c1c1f; /* Dark background color */
+  color: #ffffff; /* White text color */
   margin: 0;
   padding: 0;
 }
 
 header {
-  background-color: #007bff;
+  background-color: #5384e8;
   color: white;
   padding: 20px 0;
   text-align: center;
@@ -17,14 +17,18 @@ main {
   padding: 20px;
 }
 
+select {
+    margin-bottom: 10px;
+}
+
 select, button {
-  margin-top: 10px;
   padding: 10px;
   font-size: 16px;
+  border-radius: 10px;
 }
 
 button {
-  background-color: #007bff;
+  background-color: #5384e8;
   color: white;
   border: none;
   cursor: pointer;
@@ -32,17 +36,17 @@ button {
 }
 
 button:disabled {
-  background-color: #ccc;
+  background-color: #555555; /* Darker grey for disabled state */
   cursor: not-allowed;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #5384e8;
 }
 
 .remove-icon {
   cursor: pointer;
-  color: #888888;
+  color: #cccccc; /* Light grey for remove icon */
   background-color: transparent;
   border: none;
   font-size: 1.2rem;
@@ -72,9 +76,9 @@ button:hover {
   align-items: center;
   border: 1px solid #888888;
   border-radius: 10px;
-  padding: 8px 12px;
+  padding: 0px 12px;
   margin: 5px;
-  background-color: #f8f9fa;
+  background-color: #2c2c2e; /* Darker grey for champion pool items */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -83,25 +87,19 @@ button:hover {
 }
 
 .suggested-champion-item {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 10px;
+  background-color: #333333; /* Dark grey for suggested pool items */
+  border: 1px solid #555555; /* Darker border */
+  border-radius: 5px;
   padding: 10px;
-  margin: 10px 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s;
-}
-
-.suggested-champion-item:hover {
-  background-color: #45a049;
+  width: fit-content;
 }
 
 .suggested-pool {
   font-weight: bold;
 }
-
-/* If you want to add a subtle border between the suggested pool items */
-.suggested-champion-item:not(:last-child) {
-  border-bottom: 1px solid #ddd;
+.suggested-champion-item:hover {
+  background-color: #5384e8;
 }

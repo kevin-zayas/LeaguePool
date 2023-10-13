@@ -15,19 +15,20 @@
     </header>
 
     <main>
-        <section>
+      <section>
+        <div class="role-selection-container">
             <h2>Select a Role</h2>
             <select id="role-select" onchange="handleRoleSelection()">
-              <option value="">Select a Role</option>
-              <option value="top">Top</option>
-              <!-- <option value="jungle">Jungle</option>
-              <option value="mid">Mid</option>
-              <option value="adc">ADC</option>
-              <option value="support">Support</option> -->
+                <option value="">Select a Role</option>
+                <option value="top">Top</option>
+                <!-- <option value="jungle">Jungle</option>
+                <option value="mid">Mid</option>
+                <option value="adc">ADC</option>
+                <option value="support">Support</option> -->
             </select>
-        </section>
-
+        </div>
         <button id="save-button" onclick="handleRoleSave()" disabled>Save Selection</button>
+      </section>
 
 
         <section id="champion-pool-section" style="display: none;">
